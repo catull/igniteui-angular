@@ -91,6 +91,8 @@ export interface IComboSelectionChangeEventArgs extends CancelableEventArgs, IBa
     added: any[];
     /** An array containing the values that will be removed from the selection (if any) */
     removed: any[];
+    /** The text displayed in the combo text box */
+    textValue: string;
     /** The user interaction that triggered the selection change */
     event?: Event;
 }
@@ -1382,12 +1384,15 @@ export class IgxComboComponent extends DisplayDensityBase implements IgxComboBas
     protected setSelection(newSelection: Set<any>, event?: Event): void {
         const removed = diffInSets(this.selection.get(this.id), newSelection);
         const added = diffInSets(newSelection, this.selection.get(this.id));
+        const newSelectionAsArray = Array.from(newSelection);
+        const text = this.concatTextValue(newSelectionAsArray);
         const args: IComboSelectionChangeEventArgs = {
-            newSelection: Array.from(newSelection),
+            newSelection: newSelectionAsArray,
             oldSelection: Array.from(this.selection.get(this.id) || []),
             added,
             removed,
             event,
+            textValue: text,
             cancel: false
         };
         this.onSelectionChange.emit(args);
@@ -1413,6 +1418,17 @@ export class IgxComboComponent extends DisplayDensityBase implements IgxComboBas
             this._value = value;
             this._onChangeCallback(args.newSelection);
         }
+    }
+
+    /** Returns a string that should be populated in the combo's text box
+     * If the combo is remote, returns an empty string (as the items may not be loaded yet)
+     */
+    private concatTextValue(selection: any[]): string {
+        if (this.isRemote) { return ''; }
+        const value = this.displayKey !== null && this.displayKey !== undefined ?
+        this.convertKeysToItems(selection).map(entry => entry[this.displayKey]).join(', ') :
+        selection.join(', ');
+        return value;
     }
 
     /** if there is a valueKey - map the keys to data items, else - just return the keys */

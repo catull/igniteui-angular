@@ -1018,6 +1018,7 @@ describe('igxCombo', () => {
                 newSelection: [targetItem.itemID],
                 added: [targetItem.itemID],
                 removed: [],
+                textValue: `${targetItem.value[combo.displayKey]}`,
                 event: undefined,
                 cancel: false
             });
@@ -1032,6 +1033,7 @@ describe('igxCombo', () => {
                 newSelection: [],
                 added: [],
                 removed: [targetItem.itemID],
+                textValue: '',
                 event: undefined,
                 cancel: false
             });
@@ -1056,6 +1058,7 @@ describe('igxCombo', () => {
                 newSelection: newSelection,
                 added: [combo.data[1], combo.data[5], combo.data[6]],
                 removed: [],
+                textValue: `${newSelection.map(entry => entry[combo.displayKey])}`,
                 event: undefined,
                 cancel: false
             });
@@ -1072,6 +1075,7 @@ describe('igxCombo', () => {
                 newSelection: newSelection,
                 removed: [],
                 added: [combo.data[3]],
+                textValue: `${newSelection.map(entry => entry[combo.displayKey])}`,
                 event: undefined,
                 cancel: false
             });
@@ -1087,6 +1091,7 @@ describe('igxCombo', () => {
                 newSelection: newSelection,
                 removed: oldSelection,
                 added: [combo.data[0]],
+                textValue: `${newSelection.map(entry => entry[combo.displayKey])}`,
                 event: undefined,
                 cancel: false
             });
@@ -1103,6 +1108,7 @@ describe('igxCombo', () => {
                 oldSelection: oldSelection,
                 newSelection: newSelection,
                 removed: [combo.data[0]],
+                textValue: `${newSelection.map(entry => entry[combo.displayKey])}`,
                 added: [],
                 event: undefined,
                 cancel: false
@@ -1420,11 +1426,12 @@ describe('igxCombo', () => {
             const dropdown = combo.dropdown;
             let timesFired = 1;
             const mockEvent = new MouseEvent('click');
-            const eventParams = {
+            const eventParams: IComboSelectionChangeEventArgs = {
                 oldSelection: [],
                 newSelection: [],
                 added: [],
                 removed: [],
+                textValue: '',
                 event: mockEvent,
                 cancel: false
             };
@@ -1591,12 +1598,13 @@ describe('igxCombo', () => {
             fixture.detectChanges();
             const combo = fixture.componentInstance.combo;
             const selectionSpy = spyOn(fixture.componentInstance, 'onSelectionChange');
-            const expectedResults = {
+            const expectedResults: IComboSelectionChangeEventArgs = {
                 newSelection: [combo.data[0]],
                 oldSelection: [],
                 added: [combo.data[0]],
                 removed: [],
                 event: undefined,
+                textValue: `${combo.data[0][combo.displayKey]}`,
                 cancel: false
             };
             combo.selectItems([combo.data[0]]);
@@ -1605,6 +1613,7 @@ describe('igxCombo', () => {
                 newSelection: [],
                 oldSelection: [combo.data[0]],
                 added: [],
+                textValue: '',
                 removed: [combo.data[0]]
             });
             combo.deselectItems([combo.data[0]]);
@@ -1616,12 +1625,13 @@ describe('igxCombo', () => {
             fixture.detectChanges();
             const combo = fixture.componentInstance.combo;
             const selectionSpy = spyOn(fixture.componentInstance, 'onSelectionChange');
-            const expectedResults = {
+            const expectedResults: IComboSelectionChangeEventArgs = {
                 newSelection: [combo.data[0], combo.data[1], combo.data[2]],
                 oldSelection: [],
                 added: [combo.data[0], combo.data[1], combo.data[2]],
                 removed: [],
                 event: undefined,
+                textValue: `${[combo.data[0], combo.data[1], combo.data[2]].map(entry => entry[combo.displayKey]).join(', ')}`,
                 cancel: false
             };
             combo.selectItems([combo.data[0], combo.data[1], combo.data[2]]);
@@ -1631,6 +1641,7 @@ describe('igxCombo', () => {
                 newSelection: [combo.data[1], combo.data[2]],
                 oldSelection: [combo.data[0], combo.data[1], combo.data[2]],
                 added: [],
+                textValue: `${[combo.data[1], combo.data[2]].map(entry => entry[combo.displayKey]).join(', ')}`,
                 removed: [combo.data[0]]
             });
             expect(selectionSpy).toHaveBeenCalledWith(expectedResults);
@@ -1638,6 +1649,7 @@ describe('igxCombo', () => {
                 newSelection: [combo.data[4], combo.data[5], combo.data[6]],
                 oldSelection: [combo.data[1], combo.data[2]],
                 added: [combo.data[4], combo.data[5], combo.data[6]],
+                textValue: `${[combo.data[4], combo.data[5], combo.data[6]].map(entry => entry[combo.displayKey]).join(', ')}`,
                 removed: [combo.data[1], combo.data[2]]
             });
             combo.selectItems([combo.data[4], combo.data[5], combo.data[6]], true);
